@@ -1,4 +1,4 @@
-package carvalho.com.KinoClub;
+package carvalho.com.KinoClub.Presentation;
 
 /**
  * Hello world!
