@@ -11,6 +11,7 @@ import carvalho.com.KinoClub.Persistence.FilmPersistence;
 import java.util.UUID;
 
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,10 +33,16 @@ public class MoviesController {
 		JSONObject object = persistence.GetFilmByUUID(ParsedID);
 		return object.toString();
 	}
-
+	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value = "/Movies/Random", method = RequestMethod.GET)
 	@ResponseBody
 	public String GetRandomMovie() {
+		MovieServices movies = new MovieServices();
+		return movies.GetRandomMovieJSON().toString();
+	}
+	@RequestMapping(value = "/Movies/Random/Simple", method = RequestMethod.GET)
+	@ResponseBody
+	public String GetRandomMovieSimple() {
 		MovieServices movies = new MovieServices();
 
 		try {

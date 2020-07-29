@@ -20,4 +20,9 @@ public class MovieServices {
 		Movie movie = objectMapper.readValue(MovieJson.toString(), Movie.class);
 		return movie;
 	}
+	public JSONObject GetRandomMovieJSON() {
+		FilmPersistence persistence = new FilmPersistence();
+		JSONObject MovieJson = persistence.GetRandomMovie();
+		return MovieJson;
+	}
 }
