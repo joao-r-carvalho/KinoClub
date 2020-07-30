@@ -1,5 +1,8 @@
 package carvalho.com.KinoClub.Domain;
 
+import java.util.List;
+import java.util.Random;
+
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,17 +15,29 @@ import carvalho.com.KinoClub.Persistence.FilmPersistence;
 
 public class MovieServices {
 	public Movie GetRandomMovie() throws JsonMappingException, JsonProcessingException {
+		
 		FilmPersistence persistence = new FilmPersistence();
 		JSONObject MovieJson = persistence.GetRandomMovie();
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-
 		Movie movie = objectMapper.readValue(MovieJson.toString(), Movie.class);
 		return movie;
 	}
+
 	public JSONObject GetRandomMovieJSON() {
+		
 		FilmPersistence persistence = new FilmPersistence();
 		JSONObject MovieJson = persistence.GetRandomMovie();
 		return MovieJson;
+		
+	}
+
+	public String GetRandomMovieFromDatabase() {
+		
+		FilmPersistence p = new FilmPersistence();
+		List<String> Movies = p.GetAllMovies();
+		int IndexToFetch = new Random().nextInt(Movies.size());
+		return Movies.get(IndexToFetch);
+
 	}
 }
