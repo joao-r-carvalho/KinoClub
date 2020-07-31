@@ -32,16 +32,23 @@ public class FilmPersistence {
 	}
 	
 	public List<String> GetAllMovies(){
-		MongoCollection<Document> collection = DBConnection.GetCollection("Movies","Movies");
-		FindIterable<Document> Iterable = collection.find();
-		MongoCursor<Document> cursor = Iterable.cursor();
-		List<String> AllMovies = new ArrayList<String>();
-		while(cursor.hasNext()) {
-			
-			Document currentDocument = cursor.next();
-			AllMovies.add(currentDocument.toJson());
- 		}
-		return AllMovies;
+		MongoCollection<Document> collection;
+		try {
+			collection = DBConnection.GetCollection("Movies","Movies");
+			FindIterable<Document> Iterable = collection.find();
+			MongoCursor<Document> cursor = Iterable.cursor();
+			List<String> AllMovies = new ArrayList<String>();
+			while(cursor.hasNext()) {			
+				Document currentDocument = cursor.next();
+				AllMovies.add(currentDocument.toJson());
+	 		}
+			return AllMovies;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
 		
 	}
 

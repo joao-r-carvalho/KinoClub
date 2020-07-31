@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
+import carvalho.com.KinoClub.Persistence.DBConnection;
 import carvalho.com.KinoClub.Persistence.FilmPersistence;
 
 public class MovieServices {
+
 	public Movie GetRandomMovie() throws JsonMappingException, JsonProcessingException {
 		
 		FilmPersistence persistence = new FilmPersistence();
