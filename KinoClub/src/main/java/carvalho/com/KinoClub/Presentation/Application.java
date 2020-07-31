@@ -32,9 +32,7 @@ public class Application {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		DBConnection connection = DBConnection.GetInstance(MongoURI);
 		return args -> {
-			FilmPersistence persistence = new FilmPersistence();
-			JSONObject object = persistence.GetFilmByUUID(UUID.fromString("0d366fed-be3e-44a8-a84c-9c0bdeafc238"));
-			System.out.println(object.toString());
+ 			System.out.println("Online");
 		};
 	}
 

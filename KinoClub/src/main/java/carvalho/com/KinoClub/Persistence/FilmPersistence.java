@@ -1,27 +1,34 @@
 package carvalho.com.KinoClub.Persistence;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
-import java.util.stream.IntStream;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
-import com.mongodb.DBCursor;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
-
+import com.mongodb.client.model.Filters;
 public class FilmPersistence {
 
-	public JSONObject GetFilmByUUID(UUID id) {
-		MockDatabaseSingleton singleton = MockDatabaseSingleton.GetInstance();
-		return singleton.MockMovieDatabase.get(id);
+	public String GetFilmByUUID(String id) {
+		
+		try {
+			MongoCollection<Document> collection = DBConnection.GetCollection("Movies","Movies");
+			Bson bsonFilter = Filters.eq("_id", new ObjectId(id) );
+
+			Document document = collection.find(bsonFilter).first();
+			return document.toJson();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "Couldn't find the movie with id " + id;
+		}
 	}
 
 	public JSONObject GetRandomMovie() {

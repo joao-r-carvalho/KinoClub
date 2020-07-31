@@ -13,6 +13,7 @@ import carvalho.com.KinoClub.Domain.MovieServices;
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
 import carvalho.com.KinoClub.Persistence.FilmPersistence;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -26,23 +27,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestController
 public class MoviesController {
 
-	
+	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Movies/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String FetchMovieById(@PathVariable String id) {
-		UUID ParsedID = UUID.fromString(id);
-		FilmPersistence persistence = new FilmPersistence();
-		JSONObject object = persistence.GetFilmByUUID(ParsedID);
-		return object.toString();
+		MovieServices movieServices = new MovieServices();
+		String object = movieServices.GetMovieFromDatabase(id);
+		return object;
 	}
-
-	/*@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Movies/Random", method = RequestMethod.GET)
-	@ResponseBody
-	public String GetRandomMovie() {
-		MovieServices movies = new MovieServices();
-		return movies.GetRandomMovieJSON().toString();
-	}*/
 
 	@RequestMapping(value = "/Movies/Random/Simple", method = RequestMethod.GET)
 	@ResponseBody
@@ -60,9 +52,19 @@ public class MoviesController {
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Movies/Random", method = RequestMethod.GET)
 	@ResponseBody
-	public String Test() {
+	public String GetRandomMovie() {
 		MovieServices movies = new MovieServices();
 		String MovieJSON = movies.GetRandomMovieFromDatabase();
+		return MovieJSON;
+		 
+
+	}
+	@CrossOrigin(origins = "*")
+	@RequestMapping(value = "/Movies/All", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> ListAllMovies() {
+		MovieServices movies = new MovieServices();
+		List<String> MovieJSON = movies.GetAllMovies();
 		return MovieJSON;
 		 
 

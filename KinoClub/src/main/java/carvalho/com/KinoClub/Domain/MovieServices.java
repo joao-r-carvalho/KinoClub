@@ -42,4 +42,13 @@ public class MovieServices {
 		return Movies.get(IndexToFetch);
 
 	}
+	public String GetMovieFromDatabase(String id) {
+		FilmPersistence persistence = new FilmPersistence();
+		return persistence.GetFilmByUUID(id);
+	}
+	public List<String> GetAllMovies() {
+		FilmPersistence persistence = new FilmPersistence();
+		return persistence.GetAllMovies();
+		
+	}
 }
