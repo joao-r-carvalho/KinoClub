@@ -11,8 +11,9 @@ import com.mongodb.client.MongoDatabase;
 
 import carvalho.com.KinoClub.Domain.MovieServices;
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
-import carvalho.com.KinoClub.Persistence.FilmPersistence;
+import io.swagger.annotations.Api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,11 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@Api(tags = "Movie information")
 @RestController
-public class MoviesController {
+@RequestMapping("/Movies")
+public class MoviesController extends BaseController {
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Movies/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public String FetchMovieById(@PathVariable String id) {
 		MovieServices movieServices = new MovieServices();
@@ -36,37 +39,37 @@ public class MoviesController {
 		return object;
 	}
 
-	@RequestMapping(value = "/Movies/Random/Simple", method = RequestMethod.GET)
+	@RequestMapping(value = "/Random/Simple", method = RequestMethod.GET)
 	@ResponseBody
-	public String GetRandomMovieSimple() {
+	public Movie GetRandomMovieSimple() {
 		MovieServices movies = new MovieServices();
 
 		try {
 			Movie movie = movies.GetRandomMovie();
-			return movie.toString();
+			return movie;
 		} catch (JsonProcessingException e) {
-			return "Couldn't find you a movie";
+			return null;
 		}
 
 	}
+
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Movies/Random", method = RequestMethod.GET)
+	@RequestMapping(value = "/Random", method = RequestMethod.GET)
 	@ResponseBody
 	public String GetRandomMovie() {
 		MovieServices movies = new MovieServices();
 		String MovieJSON = movies.GetRandomMovieFromDatabase();
 		return MovieJSON;
-		 
 
 	}
+
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Movies/All", method = RequestMethod.GET)
+	@RequestMapping(value = "/All", method = RequestMethod.GET)
 	@ResponseBody
-	public List<String> ListAllMovies() {
+	public ArrayList<Movie> ListAllMovies() {
 		MovieServices movies = new MovieServices();
-		List<String> MovieJSON = movies.GetAllMovies();
-		return MovieJSON;
-		 
+
+		return movies.GetAllMoviesWellTyped();
 
 	}
 

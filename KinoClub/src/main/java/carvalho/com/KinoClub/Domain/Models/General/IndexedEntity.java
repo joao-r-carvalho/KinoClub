@@ -2,21 +2,26 @@ package carvalho.com.KinoClub.Domain.Models.General;
 
 import java.util.UUID;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 public abstract class IndexedEntity {
-	private UUID Identifier;
-
-	public UUID getIdentifier() {
-		return Identifier;
+	
+	@Id
+	protected ObjectId _id;
+	
+	public ObjectId get_id() {
+		return _id;
 	}
+	
 
-	public void setIdentifier(UUID identifier) {
-		Identifier = identifier;
+	public void set_id(ObjectId identifier) {
+		_id = identifier;
 	}
 	public IndexedEntity() {
-		setIdentifier(UUID.randomUUID());
+		set_id(new ObjectId());
 	}
-	public IndexedEntity(UUID identifier) {
-		setIdentifier(identifier);
+	public IndexedEntity(ObjectId identifier) {
+		set_id(identifier);
 	}
 
 }

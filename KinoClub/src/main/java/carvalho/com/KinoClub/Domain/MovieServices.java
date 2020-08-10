@@ -1,5 +1,6 @@
 package carvalho.com.KinoClub.Domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.util.JSON;
 
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
 import carvalho.com.KinoClub.Persistence.DBConnection;
@@ -19,18 +21,19 @@ public class MovieServices {
 	public Movie GetRandomMovie() throws JsonMappingException, JsonProcessingException {
 		
 		FilmPersistence persistence = new FilmPersistence();
-		JSONObject MovieJson = persistence.GetRandomMovie();
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-		Movie movie = objectMapper.readValue(MovieJson.toString(), Movie.class);
-		return movie;
+		return persistence.GetRandomMovie();
+	//	ObjectMapper objectMapper = new ObjectMapper();
+		//objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+		//Movie movie = objectMapper.readValue(MovieJson.toString(), Movie.class);
+	//	return movie;
 	}
 
 	public JSONObject GetRandomMovieJSON() {
 		
 		FilmPersistence persistence = new FilmPersistence();
-		JSONObject MovieJson = persistence.GetRandomMovie();
-		return MovieJson;
+		return new JSONObject(JSON.serialize(persistence.GetRandomMovie()));
+		 
+		
 		
 	}
 
@@ -51,4 +54,10 @@ public class MovieServices {
 		return persistence.GetAllMovies();
 		
 	}
+	public ArrayList<Movie> GetAllMoviesWellTyped(){
+		FilmPersistence persistence = new FilmPersistence();
+		return persistence.GetAllMoviesWellTyped();
+		
+	}
+	
 }

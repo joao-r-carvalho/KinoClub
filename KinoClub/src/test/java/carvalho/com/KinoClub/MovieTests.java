@@ -19,7 +19,7 @@ class MovieTests {
     @Test
     void GetRandomMovieFromPersistenceSuccess() {
 		FilmPersistence persistence = new FilmPersistence();
-		JSONObject object = persistence.GetRandomMovie();
+		Movie object = persistence.GetRandomMovie();
 		assertNotNull(object);
 		
     }
