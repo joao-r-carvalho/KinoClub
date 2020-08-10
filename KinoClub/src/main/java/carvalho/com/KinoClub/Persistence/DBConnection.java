@@ -15,7 +15,7 @@ public class DBConnection {
 	private static DBConnection DatabaseSingleton;
 
 	public static MongoClient MovieDatabase;
-	
+
 	public static synchronized DBConnection GetInstance(String MongoURI) {
 		if (DatabaseSingleton == null) {
 			MongoClientURI uri = new MongoClientURI(MongoURI);
@@ -24,27 +24,34 @@ public class DBConnection {
 			DatabaseSingleton = new DBConnection();
 
 			MovieDatabase = mongoClient;
-			
+
 		}
 		return DatabaseSingleton;
 	}
-	
+
 	private static synchronized DBConnection GetInstance() throws Exception {
 		if (DatabaseSingleton == null) {
-			throw new Exception("Mongo db connection was not initiated, GetInstance needs to be called with target mongo URI first");
+			throw new Exception(
+					"Mongo db connection was not initiated, GetInstance needs to be called with target mongo URI first");
 		}
 		return DatabaseSingleton;
-		
+
 	}
-	
-	
+
 	public static MongoCollection<Document> GetCollection(String DatabaseName, String CollectionName) throws Exception {
-		DBConnection connection = DBConnection.GetInstance();
-		CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-		MongoDatabase database = connection.MovieDatabase.getDatabase(DatabaseName).withCodecRegistry(pojoCodecRegistry);
+		MongoDatabase database = GetDatabase(DatabaseName);
 		MongoCollection<Document> collection = database.getCollection(CollectionName);
 		return collection;
- 		
+
+	}
+
+	public static MongoDatabase GetDatabase(String DatabaseName) throws Exception {
+		DBConnection connection = DBConnection.GetInstance();
+		CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
+				fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+		MongoDatabase database = connection.MovieDatabase.getDatabase(DatabaseName)
+				.withCodecRegistry(pojoCodecRegistry);
+		return database;
+
 	}
 }

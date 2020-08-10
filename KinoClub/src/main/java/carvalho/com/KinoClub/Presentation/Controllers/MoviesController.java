@@ -9,8 +9,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import carvalho.com.KinoClub.Domain.MovieServices;
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
+import carvalho.com.KinoClub.Domain.Services.MovieServices;
 import io.swagger.annotations.Api;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,5 +63,18 @@ public class MoviesController extends BaseController {
 		return movies.GetAllMoviesWellTyped();
 
 	}
+	
+	@CrossOrigin(origins = "*")
+	@RequestMapping(value = "/Movies/New", method = RequestMethod.POST)
+	@ResponseBody
+	public Boolean InsertMovie(@RequestBody Movie movie) {
+		MovieServices movies = new MovieServices();
+
+		return movies.InsertMovie(movie);
+
+	}
+	
+	
+	
 
 }
