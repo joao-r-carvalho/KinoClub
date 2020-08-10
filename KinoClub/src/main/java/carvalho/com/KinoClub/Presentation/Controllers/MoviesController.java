@@ -33,13 +33,13 @@ public class MoviesController extends BaseController {
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public String FetchMovieById(@PathVariable String id) {
+	public Movie FetchMovieById(@PathVariable String id) {
 		MovieServices movieServices = new MovieServices();
-		String object = movieServices.GetMovieFromDatabase(id);
-		return object;
+		Movie movie =movieServices.GetMovieFromDatabase(id);
+		return movie;
 	}
 
-	@RequestMapping(value = "/Random/Simple", method = RequestMethod.GET)
+	@RequestMapping(value = "/Random", method = RequestMethod.GET)
 	@ResponseBody
 	public Movie GetRandomMovieSimple() {
 		MovieServices movies = new MovieServices();
@@ -50,16 +50,6 @@ public class MoviesController extends BaseController {
 		} catch (JsonProcessingException e) {
 			return null;
 		}
-
-	}
-
-	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Random", method = RequestMethod.GET)
-	@ResponseBody
-	public String GetRandomMovie() {
-		MovieServices movies = new MovieServices();
-		String MovieJSON = movies.GetRandomMovieFromDatabase();
-		return MovieJSON;
 
 	}
 

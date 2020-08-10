@@ -20,18 +20,19 @@ import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
 
 public class FilmPersistence {
 
-	public String GetFilmByUUID(String id) {
+	public Movie GetFilmByUUID(String id) {
 
 		try {
 			MongoCollection<Document> collection = DBConnection.GetCollection("Movies", "Movies");
-			Bson bsonFilter = Filters.eq("_id", new ObjectId(id));
-			Document document = collection.find(bsonFilter).first();
-			return document.toJson();
+			Bson bsonFilter = Filters.eq("MovieIdentifier",id);
+			return collection.find(bsonFilter,Movie.class).first();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "Couldn't find the movie with id " + id;
+			Movie error = new Movie();
+			error.Description = "Oops couldn't find your movie";
+			return error;
 		}
 	}
 

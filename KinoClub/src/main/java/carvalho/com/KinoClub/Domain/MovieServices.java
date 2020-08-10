@@ -45,7 +45,7 @@ public class MovieServices {
 		return Movies.get(IndexToFetch);
 
 	}
-	public String GetMovieFromDatabase(String id) {
+	public Movie GetMovieFromDatabase(String id) {
 		FilmPersistence persistence = new FilmPersistence();
 		return persistence.GetFilmByUUID(id);
 	}
