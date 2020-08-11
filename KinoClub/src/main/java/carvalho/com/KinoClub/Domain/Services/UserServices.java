@@ -16,15 +16,19 @@ public class UserServices {
 		// The ids are getting fetched properly but the are not being recognized by the
 		// Bson filter
 		FavoriteMovieList MovieIds = Users.GetFavoriteMovieIds(User.UserId);
+		ArrayList<Movie> Movies = new ArrayList<Movie>();
+		if (MovieIds != null) {
+			Movies = Films.GetMoviesByID(MovieIds.MovieIdentifiers);
 
-		ArrayList<Movie> Movies = Films.GetMoviesByID(MovieIds.MovieIdentifiers);
+		}
 		return Movies;
+
 	}
 
 	public void AddMovieToUserFavorites(String AuthenticationToken, String MovieIdentifier) {
 		AuthenticationServices s = new AuthenticationServices();
 		User u = s.GetUserFromToken(AuthenticationToken);
-		AddMovieToUserFavorites(u,MovieIdentifier);
+		AddMovieToUserFavorites(u, MovieIdentifier);
 	}
 
 	public void AddMovieToUserFavorites(User user, String MovieIdentifier) {
