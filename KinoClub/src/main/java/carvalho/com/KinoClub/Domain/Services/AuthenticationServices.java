@@ -79,6 +79,10 @@ public class AuthenticationServices {
 	public Cookie BuildAuthenticationCookie(String token) {
 		Cookie AuthenticationCookie = new Cookie("KCAuthentication" , token );
 		AuthenticationCookie.setMaxAge(60*60*24);
+		AuthenticationCookie.setSecure(true);
+		AuthenticationCookie.setPath("/");
+
+
 		return AuthenticationCookie;
 		
 	}

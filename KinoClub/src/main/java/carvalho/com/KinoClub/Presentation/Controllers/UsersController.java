@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
-import carvalho.com.KinoClub.Domain.Models.Users.User;
 import carvalho.com.KinoClub.Domain.Models.Users.UserProfile;
-import carvalho.com.KinoClub.Domain.Services.MovieServices;
 import carvalho.com.KinoClub.Domain.Services.UserServices;
 import io.swagger.annotations.Api;
 
@@ -31,15 +28,27 @@ import io.swagger.annotations.Api;
 public class UsersController extends BaseController {
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Me", method = RequestMethod.GET)
-	public UserProfile Profile(@RequestHeader @RequestParam(required = false) @CookieValue("KCAuthentication") String AuthenticationToken, HttpServletResponse response) throws IOException {
+	public UserProfile Profile(
+			/* @RequestHeader @RequestParam(required = false) String AuthenticationToken, */HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies == null) {
+			response.sendError(401, "Please login first");
+			return null;
+		}
 		
-		if (AuthenticationToken == null) {
+		Optional<Cookie> Auth = Arrays.stream(cookies).filter(x -> x.getName().equalsIgnoreCase("KCAuthentication")).findFirst();
+
+		if (Auth.isEmpty()) {
 			response.sendError(401, "Please login first");
 			return null;
 
+		} else {
+			UserServices services = new UserServices();
+			return services.GetUserProfile(Auth.get().getValue());
+
 		}
-		UserServices services = new UserServices();
-		return services.GetUserProfile(AuthenticationToken);
 
 	}
 
