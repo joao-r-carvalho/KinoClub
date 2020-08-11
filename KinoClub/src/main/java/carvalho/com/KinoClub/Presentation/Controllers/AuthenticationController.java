@@ -22,7 +22,7 @@ import io.swagger.annotations.Api;
 @RestController
 @RequestMapping("/Authentication")
 @Api(tags = "Authorization, authentication and user session control")
-@CrossOrigin(origins = {"http://localhost:3000"} , allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "https://joao-r-carvalho.github.io"} , allowCredentials = "true")
 public class AuthenticationController extends BaseController {
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	@ResponseBody
