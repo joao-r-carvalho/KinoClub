@@ -13,11 +13,18 @@ public class UserServices {
 	public ArrayList<Movie> GetUserFavoriteMovies(User User) {
 		UserPersistence Users = new UserPersistence();
 		FilmPersistence Films = new FilmPersistence();
-		//The ids are getting fetched properly but the are not being recognized by the Bson filter 
+		// The ids are getting fetched properly but the are not being recognized by the
+		// Bson filter
 		FavoriteMovieList MovieIds = Users.GetFavoriteMovieIds(User.UserId);
-		 
+
 		ArrayList<Movie> Movies = Films.GetMoviesByID(MovieIds.MovieIdentifiers);
 		return Movies;
+	}
+
+	public void AddMovieToUserFavorites(String AuthenticationToken, String MovieIdentifier) {
+		AuthenticationServices s = new AuthenticationServices();
+		User u = s.GetUserFromToken(AuthenticationToken);
+		AddMovieToUserFavorites(u,MovieIdentifier);
 	}
 
 	public void AddMovieToUserFavorites(User user, String MovieIdentifier) {
@@ -26,14 +33,14 @@ public class UserServices {
 
 	}
 
-	public UserProfile GetUserProfile(String userId) {
+	public UserProfile GetUserProfile(String JWT) {
 		UserProfile profile = new UserProfile();
-		User stub = new User();
-		stub.UserId = userId;
-		profile.favoriteMovies = GetUserFavoriteMovies(stub);
+		AuthenticationServices s = new AuthenticationServices();
+		User u = s.GetUserFromToken(JWT);
+		profile.user = u;
+		profile.favoriteMovies = GetUserFavoriteMovies(u);
 		return profile;
-		
+
 	}
-	
-	
+
 }

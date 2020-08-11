@@ -39,6 +39,19 @@ public class UserPersistence {
 
 	}
 
+	public static User GetUserByUserId(String UserID) {
+		try {
+			MongoCollection<Document> collection = DBConnection.GetCollection("Movies", "Users");
+			Bson bsonFilter = Filters.eq("UserId", UserID);
+			return collection.find(bsonFilter, User.class).first();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
 	public static Boolean DoesUsernameExist(String username) {
 		try {
 			MongoCollection<Document> collection = DBConnection.GetCollection("Movies", "Users");

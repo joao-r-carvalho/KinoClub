@@ -1,5 +1,9 @@
 # KinoClub
 
+API Documentation
+
+https://kinoclub-1595860726231.azurewebsites.net/swagger-ui.html
+
 To run:
  mvn spring-boot:run
  

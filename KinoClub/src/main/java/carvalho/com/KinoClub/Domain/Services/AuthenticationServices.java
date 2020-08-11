@@ -8,6 +8,7 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javax.crypto.SecretKeyFactory;
@@ -17,6 +18,7 @@ import javax.servlet.http.Cookie;
 import carvalho.com.KinoClub.Domain.Models.Users.RegistrationRequest;
 import carvalho.com.KinoClub.Domain.Models.Users.User;
 import carvalho.com.KinoClub.Persistence.UserPersistence;
+import io.jsonwebtoken.Claims;
 
 public class AuthenticationServices {
 	public User RegisterUser(RegistrationRequest registrationRequest) {
@@ -44,17 +46,39 @@ public class AuthenticationServices {
 	public String Login(String username, String Password) {
 		UserPersistence persistence = new UserPersistence();
 		if (ValidatePassword(username, Password)) {
-			return BuildToken(username);
+			User u = persistence.GetUser(username);
+			return BuildAuthenticationToken(u.UserId);
 		}
 		return "";
 	}
 
-	public String BuildToken(String username) {
-		return "TESTTOKEN";
+	public String BuildAuthenticationToken(String UserId) {
+		SecurityServices s = new SecurityServices();
+		String SessionIdentifier = UUID.randomUUID().toString();
+		String Issuer = "KinoClub";
+		String Subject = "Client";
+		long ttl = 1000*60*60;
+
+		HashMap<String,Object> claims = new HashMap<String,Object>();
+		claims.put(s.Claim_UserID, UserId);
+		
+		
+		String jwt = s.createJWT(SessionIdentifier, Issuer, Subject, ttl, claims);
+		return jwt;
 	}
+	
+	public User GetUserFromToken(String JWT) {
+		SecurityServices securityServices = new SecurityServices();
+		UserPersistence users = new UserPersistence();
+		Claims JWTClaims = securityServices.decodeJWT(JWT);
+		String UserId = (String) JWTClaims.get(securityServices.Claim_UserID);
+		User user = users.GetUserByUserId(UserId);
+		return user;
+	}
+	
 	public Cookie BuildAuthenticationCookie(String token) {
 		Cookie AuthenticationCookie = new Cookie("KCAuthentication" , token );
-		AuthenticationCookie.setMaxAge(60*60);
+		AuthenticationCookie.setMaxAge(60*60*24);
 		return AuthenticationCookie;
 		
 	}
