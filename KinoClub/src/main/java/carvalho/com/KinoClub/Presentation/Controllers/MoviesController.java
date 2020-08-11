@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Api(tags = "Movie information")
 @RestController
 @RequestMapping("/Movies")
+@CrossOrigin(origins = "*")
 public class MoviesController extends BaseController {
 
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Movie FetchMovieById(@PathVariable String id) {

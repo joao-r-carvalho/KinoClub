@@ -25,8 +25,8 @@ import io.swagger.annotations.Api;
 @RestController
 @RequestMapping("/Users")
 @Api(tags = "User preferences")
+@CrossOrigin(origins = "*")
 public class UsersController extends BaseController {
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Me", method = RequestMethod.GET)
 	public UserProfile Profile(
 			/* @RequestHeader @RequestParam(required = false) String AuthenticationToken, */HttpServletRequest request,
@@ -52,7 +52,6 @@ public class UsersController extends BaseController {
 
 	}
 
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Users/Movies", method = RequestMethod.POST)
 	@ResponseBody
 	public UserProfile AddToFavorites(@CookieValue(value = "KCAuthentication") String AuthenticationToken,

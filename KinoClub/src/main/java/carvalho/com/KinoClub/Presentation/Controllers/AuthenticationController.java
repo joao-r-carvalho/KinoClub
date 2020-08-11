@@ -3,6 +3,7 @@ package carvalho.com.KinoClub.Presentation.Controllers;
 import java.io.IOException;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,25 +22,27 @@ import io.swagger.annotations.Api;
 @RestController
 @RequestMapping("/Authentication")
 @Api(tags = "Authorization, authentication and user session control")
+@CrossOrigin(origins = {"http://localhost:3000"} , allowCredentials = "true")
 public class AuthenticationController extends BaseController {
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	@ResponseBody
-	public User Login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
+	public User Login(@RequestBody LoginRequest loginRequest,HttpServletRequest request,HttpServletResponse response) throws IOException {
 		AuthenticationServices services = new AuthenticationServices();
+		Cookie[] cooks = request.getCookies();
 		String token = services.Login(loginRequest.Username, loginRequest.Password);
-		if(token.isEmpty()) {
+
+		if (token.isEmpty()) {
 			response.sendError(401, "Wrong credentials");
 			return null;
+		} else {
+			response.addCookie(services.BuildAuthenticationCookie(token));
+			AuthenticationServices s = new AuthenticationServices();
+			return s.GetUserFromToken(token);
+
 		}
-		response.addCookie(services.BuildAuthenticationCookie(token));
-		
-		AuthenticationServices s = new AuthenticationServices();
-		return s.GetUserFromToken(token);
 
 	}
 
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/Register", method = RequestMethod.POST)
 	@ResponseBody
 	public String Register(@RequestBody RegistrationRequest registrationRequest, HttpServletResponse response) {
