@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.spec.KeySpec;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -15,6 +17,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.servlet.http.Cookie;
 
+import org.springframework.http.ResponseCookie;
+
+import carvalho.com.KinoClub.Domain.Config.KinoConstants;
 import carvalho.com.KinoClub.Domain.Models.Users.RegistrationRequest;
 import carvalho.com.KinoClub.Domain.Models.Users.User;
 import carvalho.com.KinoClub.Persistence.UserPersistence;
@@ -32,11 +37,9 @@ public class AuthenticationServices {
 
 			user.Base64EncodedSalt = Base64EncodedSalt;
 			user.Base64EncodedSaltedPasswordHash = Base64EncodedPassword;
-			// byte[] decoded = Base64.getDecoder().decode(encoded);
 			UserPersistence.RegisterUser(user);
 			return user;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
@@ -76,17 +79,30 @@ public class AuthenticationServices {
 		return user;
 	}
 	
-	public Cookie BuildAuthenticationCookie(String token) {
-		Cookie AuthenticationCookie = new Cookie("KCAuthentication" , token );
-		AuthenticationCookie.setMaxAge(60*60*24);
-		AuthenticationCookie.setSecure(false);
-		AuthenticationCookie.setHttpOnly(true);
-		AuthenticationCookie.setPath("/");
+	public ResponseCookie BuildAuthenticationCookie(String token) {	
+		return BuildAuthenticationCookie(token,false);
 
-
+		
+	}
+	public ResponseCookie BuildAuthenticationCookie(String token, boolean toDelete) {	
+			
+		ResponseCookie AuthenticationCookie = ResponseCookie.from(KinoConstants.AuthenticationCookieName, token)
+        .maxAge(toDelete ?  Duration.ZERO : Duration.ofDays(1) )
+        .sameSite("None")
+        .httpOnly(true)
+        .secure(true)
+        .path("/")
+        .build();
+	
 		return AuthenticationCookie;
 		
 	}
+	
+	public ResponseCookie DeleteAuthenticationCookie(String token) {
+		return BuildAuthenticationCookie(token,true);
+		
+	}
+	
 	public Boolean ValidatePassword(String username, String password) {
 
 		try {
@@ -98,7 +114,6 @@ public class AuthenticationServices {
 			return Arrays.equals(UserHash, CalculatedHash);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 
 			e.printStackTrace();
 			return false;

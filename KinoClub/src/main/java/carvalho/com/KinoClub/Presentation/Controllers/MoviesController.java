@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Api(tags = "Movie information")
 @RestController
 @RequestMapping("/Movies")
-@CrossOrigin(origins = "*")
+//needs to be globalized
+@CrossOrigin(origins = { "http://localhost:3000", "https://joao-r-carvalho.github.io","https://kinoclub-1595860726231.azurewebsites.net"  }, allowCredentials = "true")
 public class MoviesController extends BaseController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -54,18 +55,15 @@ public class MoviesController extends BaseController {
 
 	}
 
-	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/All", method = RequestMethod.GET)
 	@ResponseBody
 	public ArrayList<Movie> ListAllMovies() {
 		MovieServices movies = new MovieServices();
-
 		return movies.GetAllMoviesWellTyped();
 
 	}
 	
-	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/Movies/New", method = RequestMethod.POST)
+	@RequestMapping(value = "/New", method = RequestMethod.POST)
 	@ResponseBody
 	public Boolean InsertMovie(@RequestBody Movie movie) {
 		MovieServices movies = new MovieServices();
@@ -73,6 +71,8 @@ public class MoviesController extends BaseController {
 		return movies.InsertMovie(movie);
 
 	}
+	
+	
 	
 	
 	

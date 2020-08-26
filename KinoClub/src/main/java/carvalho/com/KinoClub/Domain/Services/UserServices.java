@@ -25,11 +25,6 @@ public class UserServices {
 
 	}
 
-	public void AddMovieToUserFavorites(String AuthenticationToken, String MovieIdentifier) {
-		AuthenticationServices s = new AuthenticationServices();
-		User u = s.GetUserFromToken(AuthenticationToken);
-		AddMovieToUserFavorites(u, MovieIdentifier);
-	}
 
 	public void AddMovieToUserFavorites(User user, String MovieIdentifier) {
 		UserPersistence Users = new UserPersistence();
@@ -37,14 +32,23 @@ public class UserServices {
 
 	}
 
-	public UserProfile GetUserProfile(String JWT) {
+	public UserProfile GetUserProfile(User user) {
 		UserProfile profile = new UserProfile();
-		AuthenticationServices s = new AuthenticationServices();
-		User u = s.GetUserFromToken(JWT);
-		profile.user = u;
-		profile.favoriteMovies = GetUserFavoriteMovies(u);
+		profile.user = user;
+		profile.favoriteMovies = GetUserFavoriteMovies(user);
 		return profile;
-
 	}
+
+
+	public void RemoveMovieFromUserFavorites(User user, String MovieIdentifier) {
+		UserPersistence Users = new UserPersistence();
+		Users.RemoveFromFavorites(user.UserId, MovieIdentifier);		
+	}
+
+
+	public boolean IsMovieFavorite(User user, String movieIdentifier) {
+		ArrayList<Movie> favoriteMovies = GetUserFavoriteMovies(user);
+		return favoriteMovies != null && favoriteMovies.stream().anyMatch(x->x.MovieIdentifier == movieIdentifier);
+ 	}
 
 }

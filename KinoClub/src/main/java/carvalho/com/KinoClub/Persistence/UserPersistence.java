@@ -2,6 +2,8 @@ package carvalho.com.KinoClub.Persistence;
 
 import java.util.ArrayList;
 
+import javax.xml.crypto.dsig.spec.XPathType.Filter;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -103,4 +105,25 @@ public class UserPersistence {
 			e.printStackTrace();
 		}
 	}
+
+	public void RemoveFromFavorites(String userId, String movieIdentifier) {
+		MongoDatabase Database;
+		try {
+			Database = DBConnection.GetDatabase("Movies");
+			MongoCollection<FavoriteMovieList> FavoriteMovies = Database.getCollection("UsersFavoriteMovies",
+					FavoriteMovieList.class);
+			FavoriteMovieList list = GetFavoriteMovieIds(userId);
+			if (list != null && list.MovieIdentifiers != null && list.MovieIdentifiers.contains(movieIdentifier)) {
+				Bson userIdFilter = Filters.eq("UserId" , userId );
+				Bson update = Updates.pull("MovieIdentifiers", movieIdentifier);
+ 				FavoriteMovies.updateMany(userIdFilter,update);
+
+			} 
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+
 }

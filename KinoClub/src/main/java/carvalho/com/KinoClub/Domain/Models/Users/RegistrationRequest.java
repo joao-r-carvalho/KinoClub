@@ -5,4 +5,5 @@ public class RegistrationRequest {
 	public String Password;
 	public String FullName;
 	public String Email;
+	public User.Gender Gender;
 }
