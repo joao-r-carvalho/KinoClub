@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import carvalho.com.KinoClub.Domain.Config.KinoConstants;
 import carvalho.com.KinoClub.Domain.Models.Movies.Movie;
 import carvalho.com.KinoClub.Domain.Models.Users.User;
 import carvalho.com.KinoClub.Domain.Models.Users.UserProfile;
@@ -33,7 +34,7 @@ import io.swagger.annotations.Api;
 public class UsersController extends BaseController {
 	@RequestMapping(value = "/Me", method = RequestMethod.GET)
 	public UserProfile Profile(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		User user = (User) request.getAttribute("AuthenticatedUser");
+		User user = (User) request.getAttribute(KinoConstants.AuthenticatedUser);
 		if (user == null) {
 			response.sendError(401, "Please login first");
 			return null;
@@ -48,7 +49,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public UserProfile AddToFavorites(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String MovieIdentifier) throws IOException {
-		User user = (User) request.getAttribute("AuthenticatedUser");
+		User user = (User) request.getAttribute(KinoConstants.AuthenticatedUser);
 		if (user == null) {
 			response.sendError(401, "Please login first");
 			return null;
@@ -63,7 +64,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public UserProfile RemoveFromFavorites(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody String MovieIdentifier) throws IOException {
-		User user = (User) request.getAttribute("AuthenticatedUser");
+		User user = (User) request.getAttribute(KinoConstants.AuthenticatedUser);
 		if (user == null) {
 			response.sendError(401, "Please login first");
 			return null;
@@ -79,7 +80,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public boolean IsMovieFavorite(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String MovieIdentifier) throws IOException {
-		User user = (User) request.getAttribute("AuthenticatedUser");
+		User user = (User) request.getAttribute(KinoConstants.AuthenticatedUser);
 		if (user == null) {
 			response.sendError(401, "Please login first");
 			return false;

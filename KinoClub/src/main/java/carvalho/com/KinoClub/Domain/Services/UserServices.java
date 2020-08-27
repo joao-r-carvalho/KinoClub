@@ -25,7 +25,6 @@ public class UserServices {
 
 	}
 
-
 	public void AddMovieToUserFavorites(User user, String MovieIdentifier) {
 		UserPersistence Users = new UserPersistence();
 		Users.AddToFavorites(user.UserId, MovieIdentifier);
@@ -39,16 +38,16 @@ public class UserServices {
 		return profile;
 	}
 
-
 	public void RemoveMovieFromUserFavorites(User user, String MovieIdentifier) {
 		UserPersistence Users = new UserPersistence();
-		Users.RemoveFromFavorites(user.UserId, MovieIdentifier);		
+		Users.RemoveFromFavorites(user.UserId, MovieIdentifier);
 	}
 
-
 	public boolean IsMovieFavorite(User user, String movieIdentifier) {
- 		UserPersistence Users = new UserPersistence();
-		return Users.GetFavoriteMovieIds(user.UserId).MovieIdentifiers.contains(movieIdentifier);
-  	}
+		UserPersistence Users = new UserPersistence();
+		FavoriteMovieList favoriteMovies = Users.GetFavoriteMovieIds(user.UserId);
+		return favoriteMovies != null && favoriteMovies.MovieIdentifiers != null
+				&& favoriteMovies.MovieIdentifiers.contains(movieIdentifier);
+	}
 
 }
