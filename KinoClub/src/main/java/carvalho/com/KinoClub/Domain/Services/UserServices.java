@@ -47,8 +47,8 @@ public class UserServices {
 
 
 	public boolean IsMovieFavorite(User user, String movieIdentifier) {
-		ArrayList<Movie> favoriteMovies = GetUserFavoriteMovies(user);
-		return favoriteMovies != null && favoriteMovies.stream().anyMatch(x->x.MovieIdentifier == movieIdentifier);
- 	}
+ 		UserPersistence Users = new UserPersistence();
+		return Users.GetFavoriteMovieIds(user.UserId).MovieIdentifiers.contains(movieIdentifier);
+  	}
 
 }

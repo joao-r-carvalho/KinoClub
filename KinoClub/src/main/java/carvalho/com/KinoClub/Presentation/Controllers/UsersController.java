@@ -28,7 +28,8 @@ import io.swagger.annotations.Api;
 @RestController
 @RequestMapping("/Users")
 @Api(tags = "User preferences")
-@CrossOrigin(origins = { "http://localhost:3000", "https://joao-r-carvalho.github.io","https://kinoclub-1595860726231.azurewebsites.net"  }, allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:3000", "https://joao-r-carvalho.github.io","https://kinoclub-1595860726231.azurewebsites.net"  }
+, allowCredentials = "true")
 public class UsersController extends BaseController {
 	@RequestMapping(value = "/Me", method = RequestMethod.GET)
 	public UserProfile Profile(HttpServletRequest request, HttpServletResponse response) throws IOException {
